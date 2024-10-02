@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 namespace Persistence.Repositories
 {
-    internal class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly StoreContext _storeContext;
         private readonly ConcurrentDictionary<string, object> _repositories;
@@ -23,20 +23,9 @@ namespace Persistence.Repositories
 
 
 
-        //var typeName = typeof(TEntity).Name;
-
-        //if (_repositories.ContainsKey(typeName)) return (IGenericRepository<TEntity, TKey>)_repositories[typeName];
-
-        //var repo = new GenericRepository<TEntity, TKey>(_storeContext);
-
-        //_repositories.Add(typeName, repo);
-
-        //return repo;
-
 
     }
 }
 
 
 
-//_unitofWork.GetRepo<Product,int>().GetAll() 

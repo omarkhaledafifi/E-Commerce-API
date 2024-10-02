@@ -8,3 +8,7 @@ Accept: application/json
 
 ### weatherforecast 
 GET {{E_Commerce.API_HostAddress}}/api/weatherforecast/g
+
+
+### Get All Products 
+GET {{E_Commerce.API_HostAddress }}/api/Products
