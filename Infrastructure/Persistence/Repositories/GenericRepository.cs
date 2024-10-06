@@ -32,6 +32,10 @@
         public async Task<IEnumerable<TEntity>> GetAllAsync(Specifications<TEntity> specifications)
         => await SpecificationEvaluator.GetQuery(_storeContext.Set<TEntity>(), specifications)
             .ToListAsync();
+
+        public async Task<int> CountAsync(Specifications<TEntity> specifications)
+        => await SpecificationEvaluator.GetQuery(_storeContext.Set<TEntity>(), specifications)
+            .CountAsync();
     }
 }
 //Context.Set<Product>().Include(brand).Include(Type).ToListAsync()

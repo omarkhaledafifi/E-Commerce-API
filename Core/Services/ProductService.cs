@@ -2,6 +2,7 @@
 global using Domain.Contracts;
 global using Services.Abstractions;
 global using Shared;
+using Domain.Exceptions;
 using Services.Specifications;
 
 namespace Services
@@ -16,11 +17,23 @@ namespace Services
             return brandsResult;
         }
 
-        public async Task<IEnumerable<ProductResultDTO>> GetAllProductsAsync()
+        public async Task<PaginatedResult<ProductResultDTO>> GetAllProductsAsync(ProductSpecificationsParameters parameters)
         {
-            var products = await unitOfWork.GetRepository<Product, int>().GetAllAsync(new ProductWithBrandAndTypeSpecifications());
+            var products = await unitOfWork.GetRepository<Product, int>()
+                .GetAllAsync(new ProductWithBrandAndTypeSpecifications(parameters));
             var productsResult = mapper.Map<IEnumerable<ProductResultDTO>>(products);
-            return productsResult;
+            var count = productsResult.Count();
+
+            var totalCount = await unitOfWork.GetRepository<Product, int>()
+                .CountAsync(new ProductCountSpecifications(parameters));
+
+            var result = new PaginatedResult<ProductResultDTO>
+                (parameters.pageIndex,
+                count,
+                    totalCount,
+                    productsResult);
+
+            return result;
         }
 
         public async Task<IEnumerable<TypeResultDTO>> GetAllTypesAsync()
@@ -33,8 +46,8 @@ namespace Services
         public async Task<ProductResultDTO?> GetProductByIdAsync(int id)
         {
             var product = await unitOfWork.GetRepository<Product, int>().GetAsync(new ProductWithBrandAndTypeSpecifications(id));
-            var productResult = mapper.Map<ProductResultDTO>(product);
-            return productResult;
+            return product is null ? throw new ProductNotFoundException(id)
+                : mapper.Map<ProductResultDTO?>(product);
         }
     }
 }

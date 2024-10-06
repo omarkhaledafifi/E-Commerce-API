@@ -17,6 +17,16 @@
             query = specifications.IncludeExpressions.Aggregate(
                query,
                (currentQuery, includeExpression) => currentQuery.Include(includeExpression));
+
+            if (specifications.OrderBy is not null)
+                query = query.OrderBy(specifications.OrderBy);
+            else if (specifications.OrderByDescending is not null)
+                query = query.OrderByDescending(specifications.OrderByDescending);
+
+            if (specifications.IsPaginated)
+                query = query.Skip(specifications.Skip).Take(specifications.Take);
+
+
             return query;
 
         }
