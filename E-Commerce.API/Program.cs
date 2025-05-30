@@ -11,11 +11,16 @@ namespace E_Commerce.API
             // Add services to the DI container.
 
             #region Services
-            builder.Services.AddCoreServices();
+            builder.Services.AddCoreServices(builder.Configuration);
             builder.Services.AddInfrastructureServices(builder.Configuration);
             builder.Services.AddPresentationServices();
             #endregion
+
+
+
             var app = builder.Build();
+
+
             #region PipeLines
 
 
@@ -30,6 +35,7 @@ namespace E_Commerce.API
             }
 
             app.UseStaticFiles();
+            app.UseCors("CORSPolicy");
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
@@ -43,8 +49,5 @@ namespace E_Commerce.API
 
 
         }
-
-
-
     }
 }

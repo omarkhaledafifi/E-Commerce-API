@@ -16,6 +16,16 @@ namespace E_Commerce.API.Extensions
 
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+
+            services.AddCors(config =>
+            {
+                config.AddPolicy("CORSPolicy", options =>
+                {
+                    options.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .WithOrigins("http://localhost:4200");
+                });
+            });
             return services;
         }
     }
